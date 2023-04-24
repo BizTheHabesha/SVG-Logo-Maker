@@ -43,14 +43,14 @@ describe('Shapes', () => {
             expect(square.getColor()).toEqual('blue');
         })
     })
-    describe('getSVG', () => {
+    describe('render', () => {
         it('should return a raw SVG element containing all valid data', () => {
             circle = new Circle('black');
             triangle = new Triangle('green');
             square = new Square('blue');
-            expect(circle.getSVG()).toEqual('<circle cx="150" cy="100" r="100" style="fill:black"/>');
-            expect(triangle.getSVG()).toEqual('<polygon points="0,200 300,200 150,0" style="fill:green"/>');
-            expect(square.getSVG()).toEqual('<rect x="50" y="0" width="200" height="200" style="fill:blue"/>');
+            expect(circle.render()).toEqual('<circle cx="150" cy="100" r="100" style="fill:black"/>');
+            expect(triangle.render()).toEqual('<polygon points="0,200 300,200 150,0" style="fill:green"/>');
+            expect(square.render()).toEqual('<rect x="50" y="0" width="200" height="200" style="fill:blue"/>');
         });
     });
 });
@@ -78,13 +78,13 @@ describe('SVG', () => {
             expect(mySVG.getDataPrim()).toEqual({chars: 'SVG', charsColor: '#FFFFFF', shape: shape, filename: 'logo'});
         });
     });
-    describe('getRawSVG', () => {
+    describe('render', () => {
         it('should return an SVG containing all valid data', () => {
             shape = new Circle('black');
             let mySVG = new SVG('SVG', 'white', shape, 'logo');
             rawSVG =`
             <svg viewBox="0 0 300 200">
-                ${mySVG.getDataPrim()['shape'].getSVG()}
+                ${mySVG.getDataPrim()['shape'].render()}
                 <text>
                     <tspan 
                         x="150"
@@ -96,7 +96,7 @@ describe('SVG', () => {
                     </tspan>
                 </text>
             </svg>`
-            expect(mySVG.getRawSVG()).toEqual(rawSVG);
+            expect(mySVG.render()).toEqual(rawSVG);
         });
     });
 });
