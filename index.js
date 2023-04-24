@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const SVG = require('./lib/svg-prim');
+const SVGPrims = require('./lib/svg-prim');
 // questions array for inquirer to use later
 const questions = [
     {message: "File to write to, not including file extension:",name:"filename", type:'input',default:'logo'},
@@ -10,7 +10,7 @@ const questions = [
         'Triangle',
         'Circle'
     ], default: 'Square'},
-    {message: "Color for that shape, either hexcode or CSS basic color codes (3 character codes not supported", name:"shapeColor",type:'input',default:'black'},
+    {message: "Color for that shape, either hexcode or CSS basic color codes (3 character codes not supported):", name:"shapeColor",type:'input',default:'black'},
 ]
 function init(){
     // directions for the user
@@ -18,23 +18,34 @@ function init(){
     // intialize inquirer with our given questions.
     inquirer.prompt(questions)
     .then(response => {
-        // hold our response
-        let res;
+        // hold our classes
+        let svg;
+        let shape;
+        try {
+            // try creating the Shape instance using the shape color from inquirer
+            if(response['shape'] === 'Circle') shape = new SVGPrims.Circle(response['shapeColor']);
+            if(response['shape'] === 'Triangle') shape = new SVGPrims.Triangle(response['shapeColor']);
+            if(response['shape'] === 'Square') shape = new SVGPrims.Square(response['shapeColor']);
+        } catch (err) {
+            // if creating this instance threw an error, create a Shape using default params
+            shape = new SVGPrims.Square('black');
+            console.error('An error occured creating your Shape. A default black square will be used instead.');
+        }
         try {
             // try creating an SVG instance using the given data from inquirer
-            res = new SVG(response['chars'], response['charsColor'], response['shape'], response['shapeColor'], response['filename']);
+            svg = new SVGPrims.SVG(response['chars'], response['charsColor'], shape, response['filename']);
         } catch (err) {
             // if creating this instance threw an error, create an SVG using default params
-            res = new SVG('SVG', 'white', 'square', 'black', 'logo');
-            console.error('An error occured generating your SVG. A default "logo.svg" will be generated instead.');
+            svg = new SVGPrims.SVG('SVG', 'white', shape, response['filename']);
+            console.error('An error occured generating your SVG. A default SVG will be generated instead.');
         }
-        return res;
+        return svg;
     })
     .then(svg => {
         // create an SVG of that class
         svg.writeToFile();
         // confirm to user that the file was created.
-        console.log(`Wrote to ${svg.filename}.svg succesfully`);
-    })
+        console.log(`Wrote to ${svg.getDataPrim()['filename']}.svg succesfully`);
+    });
 }
 init();
