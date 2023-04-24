@@ -42,10 +42,21 @@ function init(){
         return svg;
     })
     .then(svg => {
-        // create an SVG of that class
-        svg.writeToFile();
+        try{
+            // create the SVG file if it doesn't exist and write to it.
+            svg.writeToFile();
+        } catch (err){
+            // if we encounter an error while writing, we throw the error.
+            console.error('An error occured writing to your SVG.');
+            throw err;
+        } 
         // confirm to user that the file was created.
         console.log(`Wrote to ${svg.getDataPrim()['filename']}.svg succesfully`);
+    })
+    .catch(err => {
+        // any uncaught exceptions should be thrown.
+        console.error('An exception occured.');
+        throw err;
     });
 }
 init();
