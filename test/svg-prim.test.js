@@ -1,49 +1,90 @@
-const SVG = require('../lib/svg-prim');
-describe('SVG', () => {
+const SVGPrims = require('../lib/svg-prim');
+const SVG = SVGPrims.SVG;
+const Square = SVGPrims.Square;
+const Circle = SVGPrims.Circle;
+const Triangle = SVGPrims.Triangle;
+
+describe('Shapes', () => {
     describe('constructer', () => {
-        it('should throw an error if any input is not type string', () => {
-            expect(() => new SVG(1, 'white', 'circle', 'black', 'logo')).toThrowError(new Error('chars must be type string'));
-            expect(() => new SVG('SVG', 1, 'circle', 'black', 'logo')).toThrowError(new Error('charsColor must be type string'));
-            expect(() => new SVG('SVG', 'white', 1, 'black', 'logo')).toThrowError(new Error('shape must be type string'));
-            expect(() => new SVG('SVG', 'white', 'circle', 1, 'logo')).toThrowError(new Error('shapeColor must be type string'));
-            expect(() => new SVG('SVG', 'white', 'circle', 'black', 1)).toThrowError(new Error('filename must be type string'));
-        })
-        it('should throw an error given more than 3 chars', () => {
-            expect(() => new SVG('1234','white','circle','black','logo')).toThrowError(new Error('SVG can only contain up to 3 chars'));
+        it('should throw an error if color is not type string', () => {
+            expect(() => new Circle(1)).toThrowError(new Error('color must be type string'))
+            expect(() => new Triangle(1)).toThrowError(new Error('color must be type string'))
+            expect(() => new Square(1)).toThrowError(new Error('color must be type string'))
         });
-        it('should throw an error given an incorrect hexcode or CSS basic color code', () => {
-            expect(() => new SVG('SVG', '#wrong', 'circle', 'black', 'logo')).toThrowError(new Error('charsColor must be a valid hex code or color keyword'));
-            expect(() => new SVG('SVG', 'white', 'circle', '#wrong', 'logo')).toThrowError(new Error('shapeColor must be a valid hex code or color keyword'));
+        it('should throw an error given an invalid hexcode or basic color keyword', () => {
+            expect(() => new Circle('#wrong')).toThrowError(new Error('color must be a valid hex code or color keyword'))
+            expect(() => new Triangle('#wrong')).toThrowError(new Error('color must be a valid hex code or color keyword'))
+            expect(() => new Square('#wrong')).toThrowError(new Error('color must be a valid hex code or color keyword'))
         });
-        it('should throw an error given an invalid shape', () => {
-            expect(() => new SVG('SVG', 'white', 'pentagon', 'black', 'logo')).toThrowError(new Error('shape must be a valid shape'));
-        });
-        it('should contain all valid data passed to it', () => {
-            let mySVG = new SVG('SVG', '#FFFFFF', 'circle', '#000000', 'logo');
-            expect(mySVG.getDataPrim()).toEqual({chars: 'SVG', charsColor: '#FFFFFF', shape: 'circle', shapeColor: '#000000', filename: 'logo'});
+        it('should contain all valid data passed to them', () => {
+            circle = new Circle('black');
+            triangle = new Triangle('green');
+            square = new Square('blue');
+            expect(circle.color).toEqual('black');
+            expect(triangle.color).toEqual('green');
+            expect(square.color).toEqual('blue');
         });
     });
-    describe('getRawShape', () => {
-        it('should throw an error if the shape is invalid', () => {
-            let mySVG = new SVG('SVG', '#FFFFFF', 'circle', '#000000', 'logo');
-            mySVG.shape = 'wrong';
-            expect(() => mySVG.getRawShape()).toThrowError(new Error('--SVG.getRawShape() invalid shape'));
+    describe('getColor', () => {
+        it('should throw an error if color is undefined', () => {
+            circle = new Circle();
+            triangle = new Triangle();
+            square = new Square();
+            expect(() => circle.getColor()).toThrowError(new Error('color has not been initialized'));
+            expect(() => triangle.getColor()).toThrowError(new Error('color has not been initialized'));
+            expect(() => square.getColor()).toThrowError(new Error('color has not been initialized'));
+        })
+        it('should return the color passed to it', () => {
+            circle = new Circle('black');
+            triangle = new Triangle('green');
+            square = new Square('blue');
+            expect(circle.getColor()).toEqual('black');
+            expect(triangle.getColor()).toEqual('green');
+            expect(square.getColor()).toEqual('blue');
+        })
+    })
+    describe('getSVG', () => {
+        it('should return a raw SVG element containing all valid data', () => {
+            circle = new Circle('black');
+            triangle = new Triangle('green');
+            square = new Square('blue');
+            expect(circle.getSVG()).toEqual('<circle cx="150" cy="100" r="100" style="fill:black"/>');
+            expect(triangle.getSVG()).toEqual('<polygon points="0,200 300,200 150,0" style="fill:green"/>');
+            expect(square.getSVG()).toEqual('<rect x="50" y="0" width="200" height="200" style="fill:blue"/>');
         });
-        it('should return raw SVG of a shape given a valid shape', () => {
-            let circle = new SVG('SVG', 'white', 'circle', 'black', 'logo');
-            let triangle = new SVG('SVG', 'white', 'triangle', 'black', 'logo');
-            let square = new SVG('SVG', 'white', 'square', 'black', 'logo');
-            expect(circle.getRawShape()).toEqual(`<circle cx="150" cy="100" r="100" style="fill:black"/>`);
-            expect(triangle.getRawShape()).toEqual(`<polygon points="0,200 300,200 150,0" style="fill:black"/>`);
-            expect(square.getRawShape()).toEqual(`<rect x="50" y="0" width="200" height="200" style="fill:black"/>`);
+    });
+});
+
+describe('SVG', () => {
+    describe('constructer', () => {
+        it('should throw an error if any input is not the correct type', () => {
+            shape = new Circle('black');
+            expect(() => new SVG(1, 'white', shape, 'logo')).toThrowError(new Error('chars must be type string'));
+            expect(() => new SVG('SVG', 1, shape, 'logo')).toThrowError(new Error('charsColor must be type string'));
+            expect(() => new SVG('SVG', 'white', 1, 'logo')).toThrowError(new Error('shape must be instance of Shape'));
+            expect(() => new SVG('SVG', 'white', shape, 1)).toThrowError(new Error('filename must be type string'));
+        })
+        it('should throw an error given more than 3 chars', () => {
+            shape = new Circle('black')
+            expect(() => new SVG('1234','white', shape,'logo')).toThrowError(new Error('SVG can only contain up to 3 chars'));
+        });
+        it('should throw an error given an incorrect hexcode or CSS basic color code', () => {
+            shape = new Circle('black')
+            expect(() => new SVG('SVG', '#wrong', shape, 'logo')).toThrowError(new Error('charsColor must be a valid hex code or color keyword'));
+        });
+        it('should contain all valid data passed to it', () => {
+            shape = new Circle('black');
+            let mySVG = new SVG('SVG', '#FFFFFF', shape, 'logo');
+            expect(mySVG.getDataPrim()).toEqual({chars: 'SVG', charsColor: '#FFFFFF', shape: shape, filename: 'logo'});
         });
     });
     describe('getRawSVG', () => {
-        it('should return an SVG using the given valid data', () => {
-            let mySVG = new SVG('SVG', 'white', 'circle', 'black', 'logo');
+        it('should return an SVG containing all valid data', () => {
+            shape = new Circle('black');
+            let mySVG = new SVG('SVG', 'white', shape, 'logo');
             rawSVG =`
             <svg viewBox="0 0 300 200">
-                ${mySVG.getRawShape()}
+                ${mySVG.getDataPrim()['shape'].getSVG()}
                 <text>
                     <tspan 
                         x="150"
@@ -56,6 +97,6 @@ describe('SVG', () => {
                 </text>
             </svg>`
             expect(mySVG.getRawSVG()).toEqual(rawSVG);
-        })
-    })
-})
+        });
+    });
+});
