@@ -22,6 +22,7 @@ After installing, run the following command in a CLI:
 ```bash  
 node index.js  
 ```
+Or watch this [walkthrough](https://youtu.be/8CKG4tpMpqU) for a demonstration.
 ___
 ## Testing
 Unit testing it provided through jest. Run the following command to view the tests:  
