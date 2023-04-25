@@ -1,13 +1,13 @@
 
-            <svg viewBox="0 0 300 200"  xmlns="http://www.w3.org/2000/svg">
-                <circle cx="150" cy="100" r="100" style="fill:#FF6A23"/>
+            <svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="100" r="100" style="fill:#900C3F"/>
                 <text>
                     <tspan 
                         x="150"
                         y="105"
                         text-anchor="middle"
                         alignment-baseline="middle"
-                        style="fill:#96F4ED; font-size: 70px; font-family: sans-serif">
+                        style="fill:#FB800C; font-size: 70px; font-family: sans-serif">
                         123
                     </tspan>
                 </text>
