@@ -29,6 +29,7 @@ function init(){
         } catch (err) {
             // if creating this instance threw an error, create a Shape using default params
             shape = new SVGPrims.Square('black');
+            console.error(err.message);
             console.error('An error occured creating your Shape. A default black square will be used instead.');
         }
         try {
@@ -37,26 +38,25 @@ function init(){
         } catch (err) {
             // if creating this instance threw an error, create an SVG using default params
             svg = new SVGPrims.SVG('SVG', 'white', shape, response['filename']);
+            console.error(err.message);
             console.error('An error occured generating your SVG. A default SVG will be generated instead.');
         }
         return svg;
     })
     .then(svg => {
+        // create the SVG file if it doesn't exist and write to it.
         try{
-            // create the SVG file if it doesn't exist and write to it.
             svg.writeToFile();
-        } catch (err){
-            // if we encounter an error while writing, we throw the error.
-            console.error('An error occured writing to your SVG.');
-            throw err;
-        } 
-        // confirm to user that the file was created.
-        console.log(`Wrote to ${svg.getDataPrim()['filename']}.svg succesfully`);
+            console.log(`Wrote to ${svg.getDataPrim()['filename']}.svg succesfully`);
+        }catch(err){
+            console.error(err.message);
+            console.error(`An error occured writing to ${svg.getDataPrim()['filename']}`);
+        }
     })
-    .catch(err => {
+    .catch((err) => {
         // any uncaught exceptions should be thrown.
-        console.error('An exception occured.');
-        throw err;
+        console.err(err.message);
+        console.error('Encountered an exception.');
     });
 }
 init();

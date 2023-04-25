@@ -1,8 +1,4 @@
-const SVGPrims = require('../lib/svg-prim');
-const SVG = SVGPrims.SVG;
-const Square = SVGPrims.Square;
-const Circle = SVGPrims.Circle;
-const Triangle = SVGPrims.Triangle;
+const {SVG, Square, Circle, Triangle} = require('../lib/svg-prim');
 
 describe('Shapes', () => {
     describe('constructer', () => {
@@ -83,7 +79,7 @@ describe('SVG', () => {
             shape = new Circle('black');
             let mySVG = new SVG('SVG', 'white', shape, 'logo');
             rawSVG =`
-            <svg viewBox="0 0 300 200">
+            <svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
                 ${mySVG.getDataPrim()['shape'].render()}
                 <text>
                     <tspan 
