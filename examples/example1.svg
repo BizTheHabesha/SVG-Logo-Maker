@@ -1,0 +1,14 @@
+
+            <svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="150" cy="100" r="100" style="fill:#900C3F"/>
+                <text>
+                    <tspan 
+                        x="150"
+                        y="105"
+                        text-anchor="middle"
+                        alignment-baseline="middle"
+                        style="fill:#FB800C; font-size: 70px; font-family: sans-serif">
+                        123
+                    </tspan>
+                </text>
+            </svg>

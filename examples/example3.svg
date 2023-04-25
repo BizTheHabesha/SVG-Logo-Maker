@@ -1,0 +1,14 @@
+
+            <svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                <rect x="50" y="0" width="200" height="200" style="fill:#ECDE5B"/>
+                <text>
+                    <tspan 
+                        x="150"
+                        y="105"
+                        text-anchor="middle"
+                        alignment-baseline="middle"
+                        style="fill:#5B69EC; font-size: 70px; font-family: sans-serif">
+                        .*_
+                    </tspan>
+                </text>
+            </svg>
